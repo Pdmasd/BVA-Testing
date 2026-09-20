@@ -4,11 +4,15 @@ from delivery import DeliveryFee
 class TestDelivery(unittest.TestCase):
 
     all_passed = True
+    test_count = 0
 
     def check_result(self, time, distance, actual, expected, name):
+        TestDelivery.test_count += 1
         status = "PASS" if actual == expected else "FAIL"
 
         print(
+            "TC-"
+            f"{TestDelivery.test_count} | "
             f"[{status}] {name} | "
             f"Time={time}, Distance={distance} | "
             f"Expected={expected} | Actual={actual}"
@@ -19,6 +23,13 @@ class TestDelivery(unittest.TestCase):
 
     def test_time_boundaries(self):
         nom_distance = 3
+
+        self.check_result(
+            -0.1, nom_distance,
+            DeliveryFee.calculate(-0.1, nom_distance),
+            "Invalid",
+            "Time boundary"
+        )
 
         self.check_result(
             0.0, nom_distance,
@@ -90,8 +101,22 @@ class TestDelivery(unittest.TestCase):
             "Time boundary"
         )
 
+        self.check_result(
+            24.1, nom_distance,
+            DeliveryFee.calculate(24.1, nom_distance),
+            "Invalid",
+            "Time boundary"
+        )
+
     def test_distance_boundaries(self):
         nom_time = 8.0
+
+        self.check_result(
+            nom_time, -1,
+            DeliveryFee.calculate(nom_time, -1),
+            "Invalid",
+            "Distance boundary"
+        )
 
         self.check_result(
             nom_time, 0,
@@ -125,6 +150,27 @@ class TestDelivery(unittest.TestCase):
             nom_time, 6,
             DeliveryFee.calculate(nom_time, 6),
             20000,
+            "Distance boundary"
+        )
+
+        self.check_result(
+            nom_time, 49,
+            DeliveryFee.calculate(nom_time, 49),
+            235000,
+            "Distance boundary"
+        )
+
+        self.check_result(
+            nom_time, 50,
+            DeliveryFee.calculate(nom_time, 50),
+            240000,
+            "Distance boundary"
+        )
+
+        self.check_result(  
+            nom_time, 51,
+            DeliveryFee.calculate(nom_time, 51),
+            "Invalid",
             "Distance boundary"
         )
 

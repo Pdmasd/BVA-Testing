@@ -4,11 +4,15 @@ from loan_processor import LoanProcessor
 class TestLoan(unittest.TestCase):
 
     all_passed = True
+    test_count = 0
 
     def check_result(self, age, income, actual, expected, name):
+        TestLoan.test_count += 1
         status = "PASS" if actual == expected else "FAIL"
 
         print(
+            "TC-"
+            f"{TestLoan.test_count} | "
             f"[{status}] {name} | "
             f"Age={age}, Income={income} | "
             f"Expected={expected} | Actual={actual}"

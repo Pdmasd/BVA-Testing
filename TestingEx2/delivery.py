@@ -2,7 +2,7 @@ class DeliveryFee:
 
     @staticmethod
     def calculate(time: float, distance: float):
-        if time < 0.0 or time >= 24.0 or distance <= 0:
+        if time < 0.0 or time >= 24.0 or distance <= 0 or distance > 50:
             return "Invalid"
         if 6.0 <= time <= 22.0:
             if distance <= 5:
